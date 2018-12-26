@@ -10,8 +10,8 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 
 public class FUU {
 	public static void main(String[] args) throws Exception {
-		String bootstrap_servers = "localhost:9092";
-		String sink = "tufuf";
+		String bootstrap_servers = "d995aff1-kafka0.pub.va.eventador.io:9092";
+		String sink = "defaultsink";
 		String[] opts = {
 				"--read-topic", sink,
 				"--bootstrap.servers", bootstrap_servers,
