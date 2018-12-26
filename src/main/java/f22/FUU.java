@@ -22,7 +22,6 @@ public class FUU {
 			    "--flink.starting-position", "earliest"
 				};
 		final ParameterTool params = ParameterTool.fromArgs(opts);
-        System.out.println(new JSONObject(params.toMap()).toString(2));
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(100);
@@ -31,7 +30,7 @@ public class FUU {
 
         AbstractDeserializationSchema<String> deserializationSchema = new MyDeserializationSchema();
         FlinkKafkaConsumer011<String> consumer = new FlinkKafkaConsumer011<String>(
-                params.getRequired("read-topic"),
+                "defaultsink",
                 deserializationSchema,
                 params.getProperties());
         DataStream<String> mStream = env.addSource(consumer);
