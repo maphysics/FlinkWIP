@@ -28,7 +28,7 @@ public class FUU {
 
         AbstractDeserializationSchema<String> deserializationSchema = new MyDeserializationSchema();
         FlinkKafkaConsumer011<String> consumer = new FlinkKafkaConsumer011<String>(
-                params.getRequired("read-topic"),
+                params.getRequired("--read-topic"),
                 deserializationSchema,
                 params.getProperties());
         DataStream<String> mStream = env.addSource(consumer);
