@@ -71,6 +71,8 @@
 		    <artifactId>json</artifactId>
 		    <version>20180813</version>
 		</dependency>
+
+
 	</dependencies>
 
 	<profiles>
@@ -109,6 +111,7 @@
 					<version>${flink.version}</version>
 					<scope>provided</scope>
 				</dependency>
+
 			</dependencies>
 
 			<build>
