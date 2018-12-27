@@ -7,7 +7,8 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 // Debugging imports
-import org.json.JSONObject;
+// import org.json.JSONObject;
+
 // import org.apache.flink.util.OutputTag;
 
 public class FUU {
