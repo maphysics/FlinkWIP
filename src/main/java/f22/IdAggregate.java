@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IdAggregate implements AggregateFunction<Tuple1<String>, Tuple1<List<String>>, List<String>> {
+  private static final long serialVersionUID = 1L;
   @Override
   public Tuple1<List<String>> createAccumulator() {
     return new Tuple1<>(new ArrayList<String>());

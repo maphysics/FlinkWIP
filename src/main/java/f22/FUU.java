@@ -11,6 +11,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTime
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.json.JSONObject;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 
 public class FUU {
 	public static void main(String[] args) throws Exception {
@@ -56,11 +57,23 @@ public class FUU {
             .equalTo(new KeySelectorString())
             .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
             .apply (new JoinFunction<Tuple1<JSONObject>, Tuple1<String>, Tuple1<JSONObject>> (){
+                private static final long serialVersionUID = 1L;
                 @Override
                 public Tuple1<JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
                     return first;
                 }
             });   
+
+        FlinkKafkaProducer011<Tuple1<JSONObject>> myProducer = new FlinkKafkaProducer011<Tuple1<JSONObject>>(
+            "selectedsink",                  // target topic
+            new KeyedSerializationSchemaSelectedEvents(),
+            params.getProperties());   // serialization schema
+        
+        // versions 0.10+ allow attaching the records' event timestamp when writing them to Kafka;
+        // this method is not available for earlier Kafka versions
+        myProducer.setWriteTimestampToKafka(true);
+        
+        eventStream.addSink(myProducer);
 
         env.execute("FU");
 	}
