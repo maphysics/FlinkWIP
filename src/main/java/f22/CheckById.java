@@ -5,21 +5,25 @@ import java.util.ArrayList;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.state.ValueState;
 
-public class CheckById extends RichMapFunction<String, List<String>> {
+/** Purpose of map is to update the list of ids
+* Ids are stored in the ValueState object ids
+* The map returns the input string without changing it
+*/ 
+public class CheckById extends RichMapFunction<String, String> {
     private static final long serialVersionUID = 1L;
-	private transient ValueState<List<String>> sum;
+	private transient ValueState<List<String>> ids;
 
     @Override
-    public List<String> map(String input) throws Exception {
+    public String map(String input) throws Exception {
         // take the current state
         List<String> current = new ArrayList<String>();
-        if (sum.value() != null) {
-            current = sum.value();
+        if (ids.value() != null) {
+            current = ids.value();
         }
 
         current.add(input);
         // update the state
-        sum.update(current);
-        return current;
+        ids.update(current);
+        return input;
     }
 }

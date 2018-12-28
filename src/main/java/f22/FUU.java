@@ -6,10 +6,11 @@ import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
-// Debugging imports
-// import org.json.JSONObject;
-
-// import org.apache.flink.util.OutputTag;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
+import org.apache.flink.api.java.tuple.Tuple1;
+import org.apache.flink.api.common.functions.JoinFunction;
+import org.json.JSONObject;
 
 public class FUU {
 	public static void main(String[] args) throws Exception {
@@ -29,17 +30,38 @@ public class FUU {
         env.getConfig().setGlobalJobParameters(params);
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
 
-        AbstractDeserializationSchema<String> deserializationSchema = new MyDeserializationSchema();
-        FlinkKafkaConsumer011<String> consumer = new FlinkKafkaConsumer011<String>(
-                "defaultsink",
-                deserializationSchema,
-                params.getProperties());
-        DataStream<String> mStream = env.addSource(consumer);
+        AbstractDeserializationSchema<Tuple1<String>> deserializationSchema = new MyDeserializationSchema();
+        FlinkKafkaConsumer011<Tuple1<String>> idConsumer = new FlinkKafkaConsumer011<Tuple1<String>>(
+            "defaultsink",
+            deserializationSchema,
+            params.getProperties());
+        DataStream<Tuple1<String>> idStream = env.addSource(idConsumer);
+
+        // Create datastream for processing ``eventstream``
+        FlinkKafkaConsumer011<Tuple1<JSONObject>> eventConsumer = new FlinkKafkaConsumer011<Tuple1<JSONObject>>(
+            "eventsink",
+            new EventDeserializer(),
+            params.getProperties());
+        DataStream<Tuple1<JSONObject>> eventStream = env.addSource(eventConsumer); 
+
+        // // Create a window containing the ids for the last hour of processing time
+        // // Aggregate ids into a List<String> that are the ids
+        // idStream
+        //     .keyBy(0)
+        //     .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
+        //     .aggregate(new IdAggregate());
         
-        CheckById cbd = new CheckById();
-        mStream
-        .map(cbd)
-        .print();
+        eventStream.join(idStream)
+            .where(new KeySelectorJSONObjectId())
+            .equalTo(new KeySelectorString())
+            .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
+            .apply (new JoinFunction<Tuple1<JSONObject>, Tuple1<String>, Tuple1<JSONObject>> (){
+                @Override
+                public Tuple1<JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
+                    return first;
+                }
+            });   
+
         env.execute("FU");
 	}
 }
