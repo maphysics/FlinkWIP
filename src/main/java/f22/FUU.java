@@ -12,6 +12,8 @@ import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.json.JSONObject;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
+import org.apache.flink.api.java.tuple.Tuple2;
+
 
 public class FUU {
 	public static void main(String[] args) throws Exception {
@@ -52,15 +54,15 @@ public class FUU {
         //     .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
         //     .aggregate(new IdAggregate());
         
-        DataStream<Tuple1<JSONObject>> result = eventStream.join(idStream)
+        DataStream<Tuple2<String, JSONObject>> result = eventStream.join(idStream)
             .where(new KeySelectorJSONObjectId())
             .equalTo(new KeySelectorString())
             .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
-            .apply (new JoinFunction<Tuple1<JSONObject>, Tuple1<String>, Tuple1<JSONObject>> (){
+            .apply (new JoinFunction<Tuple1<JSONObject>, Tuple1<String>, Tuple2<String, JSONObject>> (){
                 private static final long serialVersionUID = 1L;
                 @Override
-                public Tuple1<JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
-                    return first;
+                public Tuple2<String, JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
+                    return new Tuple2<String, JSONObject>(second.f0, first.f0);
                 }
             });   
 
