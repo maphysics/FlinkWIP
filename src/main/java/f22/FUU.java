@@ -60,7 +60,11 @@ public class FUU {
                 private static final long serialVersionUID = 1L;
                 @Override
                 public Tuple1<JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
-                    return first;
+                    if (second.f0 == first.f0.getString("id")){
+                        return first;
+                    } else {
+                        return null;
+                    }
                 }
             });   
 
