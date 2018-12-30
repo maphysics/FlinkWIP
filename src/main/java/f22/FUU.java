@@ -52,7 +52,7 @@ public class FUU {
         //     .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
         //     .aggregate(new IdAggregate());
         
-        eventStream.join(idStream)
+        DataStream<Tuple1<JSONObject>> result = eventStream.join(idStream)
             .where(new KeySelectorJSONObjectId())
             .equalTo(new KeySelectorString())
             .window(TumblingProcessingTimeWindows.of(Time.hours(1)))
@@ -60,11 +60,7 @@ public class FUU {
                 private static final long serialVersionUID = 1L;
                 @Override
                 public Tuple1<JSONObject> join(Tuple1<JSONObject> first, Tuple1<String> second) {
-                    if (second.f0 == first.f0.getString("id")){
-                        return first;
-                    } else {
-                        return null;
-                    }
+                    return first;
                 }
             });   
 
@@ -77,7 +73,7 @@ public class FUU {
         // this method is not available for earlier Kafka versions
         myProducer.setWriteTimestampToKafka(true);
         
-        eventStream.addSink(myProducer);
+        result.addSink(myProducer);
 
         env.execute("FU");
 	}
