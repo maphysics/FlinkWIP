@@ -66,7 +66,7 @@ public class FUU {
                 }
             });   
 
-        FlinkKafkaProducer011<Tuple1<JSONObject>> myProducer = new FlinkKafkaProducer011<Tuple1<JSONObject>>(
+        FlinkKafkaProducer011<Tuple2<String, JSONObject>> myProducer = new FlinkKafkaProducer011<Tuple2<String, JSONObject>>(
             "selectedsink",                  // target topic
             new KeyedSerializationSchemaSelectedEvents(),
             params.getProperties());   // serialization schema
