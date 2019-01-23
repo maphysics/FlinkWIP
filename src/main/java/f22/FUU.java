@@ -10,7 +10,7 @@ import org.apache.flink.util.OutputTag;
 
 import java.util.List;
 
-public class FUUOriginal {
+public class FUU {
 	public static void main(String[] args) throws Exception {
 		String bootstrap_servers = "***";
 		String truststore_location = "***";
@@ -58,6 +58,6 @@ public class FUUOriginal {
 
         resultIds.print();
 
-        env.execute("FUUOriginal");
+        env.execute("FUU");
 	}
 }
