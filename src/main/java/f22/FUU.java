@@ -1,4 +1,4 @@
-package f22;
+package main.java.f22;
 
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
