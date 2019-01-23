@@ -1,4 +1,4 @@
-package main.java.f22;
+package main.java.experimentation;
 
 import java.io.IOException;
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;

@@ -1,4 +1,4 @@
-package main.java.f22;
+package main.java.experimentation;
 
 import org.apache.flink.streaming.util.serialization.KeyedSerializationSchema;
 import org.json.JSONObject;

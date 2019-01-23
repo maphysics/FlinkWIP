@@ -1,4 +1,4 @@
-package main.java.f22;
+package main.java.experimentation;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple1;
