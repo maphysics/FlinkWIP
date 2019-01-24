@@ -7,7 +7,7 @@ import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 
-public class CheckById extends RichMapFunction<Tuple2<String, String>, List<String>> {
+public class MapToSkus extends RichMapFunction<Tuple2<String, String>, List<String>> {
 	private static final long serialVersionUID = 1L;
 	private ListState<String> sum;
 

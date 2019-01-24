@@ -55,7 +55,7 @@ public class FlinkWIP {
 
         mStream
         .keyBy(0)
-        .map(new CheckById())
+        .map(new MapToSkus())
         .print();
         env.execute("FlinkWIP");
 	}
