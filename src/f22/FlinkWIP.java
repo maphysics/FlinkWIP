@@ -1,12 +1,12 @@
 package f22;
 
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
-import org.apache.flink.util.OutputTag;
 
 public class FlinkWIP {
 	public static void main(String[] args) throws Exception {
@@ -19,6 +19,7 @@ public class FlinkWIP {
 		String module = "org.apache.kafka.common.security.scram.ScramLoginModule";
         String jaasConfig = String.format("%s required username=\"%s\" password=\"%s\";", module, username, password);
 		String[] opts = {
+				"--skus-topic", "skus",
 				"--read-topic", "defaultsink",
 				//"--write-topic", "defaultsink",
 				"--bootstrap.servers", bootstrap_servers,
@@ -44,16 +45,17 @@ public class FlinkWIP {
         env.getConfig().setGlobalJobParameters(params);
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
 
-        AbstractDeserializationSchema<String> deserializationSchema = new MyDeserializationSchema();
-        FlinkKafkaConsumer011<String> consumer = new FlinkKafkaConsumer011<String>(
-                params.getRequired("read-topic"),
+        AbstractDeserializationSchema<Tuple2<String, String>> deserializationSchema = new MyDeserializationSchema();
+        FlinkKafkaConsumer011<Tuple2<String, String>> consumer = new FlinkKafkaConsumer011<Tuple2<String, String>>(
+                params.getRequired("skus-topic"),
                 deserializationSchema,
                 params.getProperties());
-        DataStream<String> mStream = env.addSource(consumer);
-        
-        CheckById cbd = new CheckById();
+
+        DataStream<Tuple2<String, String>> mStream = env.addSource(consumer);
+
         mStream
-        .map(cbd)
+        .keyBy(0)
+        .map(new CheckById())
         .print();
         env.execute("FlinkWIP");
 	}
