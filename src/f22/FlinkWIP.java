@@ -8,7 +8,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.util.OutputTag;
 
-public class FUU {
+public class FlinkWIP {
 	public static void main(String[] args) throws Exception {
 		String bootstrap_servers = "***";
 		String truststore_location = "***";
@@ -55,6 +55,6 @@ public class FUU {
         mStream
         .map(cbd)
         .print();
-        env.execute("FU");
+        env.execute("FlinkWIP");
 	}
 }
