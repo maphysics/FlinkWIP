@@ -14,8 +14,8 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer011;
 import org.json.JSONObject;
 
 public class FlinkWIP {
-	public static void main(String[] args) throws Exception {
-		String bootstrap_servers = "***";
+	public static ParameterTool init(){
+	    String bootstrap_servers = "***";
 		String truststore_location = "***";
 		String truststore_password = "***";
 		String username = "***";
@@ -47,7 +47,6 @@ public class FlinkWIP {
 	};
 		
 	public static void main(String[] args) throws Exception {
-		//final ParameterTool params = ParameterTool.fromArgs(opts);
         final ParameterTool params = FlinkWIP.init();
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
