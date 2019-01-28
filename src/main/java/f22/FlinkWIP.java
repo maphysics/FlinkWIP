@@ -33,6 +33,11 @@ public class FlinkWIP {
         kparams.setProperty("group.id", params.getRequired("group.id"));
         kparams.setProperty("bootstrap.servers", params.getRequired("bootstrap.servers"));;
 
+        // Topics
+        kparams.setProperty("skus-topic", "skus");
+        kparams.setProperty("offers-topic", "offers");
+        kparams.setProperty("write-topic", "sink2flink");
+        
         // SASL parameters
         kparams.setProperty("security.protocol", "SASL_SSL");
         kparams.setProperty("sasl.mechanism", "SCRAM-SHA-256");
