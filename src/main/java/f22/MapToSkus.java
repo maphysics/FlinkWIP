@@ -1,4 +1,4 @@
-package main.java.f22;
+package f22;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import java.util.List;
