@@ -1,21 +1,15 @@
-package main.java.f22;
+package f22;
 
 import java.io.IOException;
 
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
-import org.json.JSONObject;
+import org.apache.flink.api.java.tuple.Tuple2;
 
-public class MyDeserializationSchema extends AbstractDeserializationSchema<JSONObject> {
-    private static final long serialVersionUID = 1L;
+public class MyDeserializationSchema extends AbstractDeserializationSchema<Tuple2<String, String>> {
+	private static final long serialVersionUID = 1L;
 
 	@Override
-    public JSONObject deserialize(byte[] message) throws IOException {
-        JSONObject obj = new JSONObject(new String(message, "UTF-8"));
-        // Assumption that the flush message does not contain a key id
-        // if (obj.toMap().containsKey("id")){
-            return obj;
-        // } else {
-        //     return "flush";
-        // }
+    public Tuple2<String, String> deserialize(byte[] message) throws IOException {
+        return Tuple2.of(null, new String(message, "UTF-8"));
     }
 }

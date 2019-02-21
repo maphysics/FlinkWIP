@@ -1,4 +1,4 @@
-package main.java.f22;
+package f22;
 
 import org.apache.flink.api.common.serialization.AbstractDeserializationSchema;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -7,8 +7,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.util.OutputTag;
-
-import java.util.List;
 
 public class FUU {
 	public static void main(String[] args) throws Exception {
@@ -54,10 +52,9 @@ public class FUU {
         DataStream<String> mStream = env.addSource(consumer);
         
         CheckById cbd = new CheckById();
-        DataStream<List<String>> resultIds = mStream.map(cbd);
-
-        resultIds.print();
-
-        env.execute("FUU");
+        mStream
+        .map(cbd)
+        .print();
+        env.execute("FU");
 	}
 }
