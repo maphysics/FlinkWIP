@@ -1,4 +1,4 @@
-package f22;
+package main.java.f22;
 
 import java.util.ArrayList;
 import java.util.List;
